@@ -96,13 +96,11 @@ try {
             })
         }
         else{
-            const payload = {email:existingEmail.email , password:existingEmail.password};
+            const payload = {id:existingEmail._id,password:existingEmail.password};
         const token = jwt.sign(payload, process.env.TOKEN_SECRET_KEY , {
           expiresIn: process.env.TOKEN_EXPIRE_TIME,
         });
-        console.log( process.env.TOKEN_SECRET_KEY , {
-          expiresIn: process.env.TOKEN_EXPIRE_TIME,
-        })
+        console.log( payload,"check id")
             return res.json({
                 status:201,
                 success:true,
