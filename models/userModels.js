@@ -29,7 +29,11 @@ const userSchema=new mongoose.Schema({
     profile:{
         type:String,
         default:'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTlZZzWC0mxI0meU3_n53mzCMQ2QTMRE-yI_A&s'
-    }
+    },
+    status: {
+    type: String,
+    default: "inactive",
+  },
 },{timestamps:true});
 
 

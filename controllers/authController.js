@@ -21,7 +21,7 @@ const registerController =async  (req , res)=>{
             message:"Enter valid usertype"
            })
         }
-        
+        console.log(password,"register password")
         const existing = await userModels.findOne({email});
         if(existing)
         {
@@ -39,7 +39,8 @@ const registerController =async  (req , res)=>{
             password:hashPasspord,
             phone,
             address,
-            userType
+            userType,
+            status:"active"
         })
         if (!user){
             return res.json({

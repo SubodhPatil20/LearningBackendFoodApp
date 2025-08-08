@@ -19,6 +19,8 @@ console.log(token,"recieved token")
           message: "Unauthorized token",
         });
       }
+      console.log(decoded,"decodeddecodeddecodeddecoded");
+      
       req.user = decoded;
       next();
     });
