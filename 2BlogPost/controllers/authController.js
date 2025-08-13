@@ -1,0 +1,115 @@
+const { token } = require("morgan");
+const userModels = require("../models/userModels");
+const bcrypt =require('bcryptjs');
+const jwt =require('jsonwebtoken');
+const registerController =async  (req , res)=>{
+    try {
+        const {userName, email, password, phone} =req.body;
+
+        if(!userName || !email || !password || !phone){
+           return res.status(500).send({
+            success:false,
+            message:"All fielda are required"
+           })
+        }
+        const existing = await userModels.findOne({email});
+        if(existing)
+        {
+            return res.json({
+                status:500,
+                success:false,
+                message:"email already exist"
+            })
+        }
+        const salt = bcrypt.genSaltSync(10);
+        const hashPasspord= await bcrypt.hash(password,salt);
+        const user = await userModels.create({
+            userName,
+            email,
+            password:hashPasspord,
+            phone,
+            status:"active"
+        })
+        if (!user){
+            return res.json({
+                status:400,
+                message:"something went wrong",
+                success:false
+            })
+        }
+
+        return res.json({
+            status:200,
+            success:true,
+            message:"User is registred successfully"
+        })
+    } catch (error) {
+        res.status(500).send({
+            success:false,
+            message:"error in registerController api",
+            error
+        })
+    }
+};
+
+const loginController=async (req,res)=>{
+try {
+     const {email , password} =req.body;
+    if(!email || !password)
+    {
+        return res.json({
+            status:500,
+            success:false,
+            message:"Please inseart all Fields"
+        })
+    }
+
+    const existingEmail = await userModels.findOne({email});
+
+    if(!existingEmail)
+    {
+        return res.json({
+            status:500,
+            success:false,
+            message:"Email does not exist"
+        })
+    }
+    else{
+        const isMatch =await bcrypt.compare(password ,existingEmail.password);
+        if(isMatch)
+        {
+            return res.json({
+                status:500,
+                success:false,
+                message:"Enter a valid password"
+            })
+        }
+        else{
+            const payload = {id:existingEmail._id,password:existingEmail.password};
+        const token = jwt.sign(payload, process.env.TOKEN_SECRET_KEY , {
+          expiresIn: process.env.TOKEN_EXPIRE_TIME,
+        });
+        console.log( payload,"check id")
+            return res.json({
+                status:201,
+                success:true,
+                message:"Login successfully",
+                token
+            })
+        }
+    }
+} catch (error) {
+    res.json({
+        status:500,
+        success:false,
+        message:"Error in Login api",
+        error
+    })
+}
+   
+}
+
+
+
+
+module.exports ={registerController,loginController};

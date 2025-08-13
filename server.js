@@ -3,8 +3,6 @@ const app =express();
 const morgan =require('morgan');
 const cors=require('cors');
 const dotenv = require('dotenv');
-const mongoose =require("mongoose");
-const {configs } = require('./config/db');
 const connectDB =require('./config/db')
 dotenv.config();
 connectDB();
@@ -12,12 +10,8 @@ app.use(cors());
 app.use(express.json());
 app.use(morgan('dev'));
 
-app.use("/api/v1/test",require("./routes/testRoutes"));
-app.use("/api/v1/auth",require('./routes/authRoutes'));
-app.use("/api/v1/user",require("./routes/userRoutes"));
-app.use("/api/v1/resturant",require("./routes/resturantRoutes"));
-app.use("/api/v1/category",require("./routes/categoryRoutes"));
-app.use("/api/v1/food",require("./routes/foodRoutes"));
+// require('./1FoodYoutube/routes')(app);
+
 
 
 app.get('/',(req,res)=>{
