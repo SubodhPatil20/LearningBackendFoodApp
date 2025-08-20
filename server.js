@@ -11,7 +11,7 @@ app.use(express.json());
 app.use(morgan('dev'));
 
 // require('./1FoodYoutube/routes')(app);
-
+require('./2BlogPost/routes')(app)
 
 
 app.get('/',(req,res)=>{

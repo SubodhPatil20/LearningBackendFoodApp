@@ -1,4 +1,3 @@
-const { token } = require("morgan");
 const userModels = require("../models/userModels");
 const bcrypt =require('bcryptjs');
 const jwt =require('jsonwebtoken');
@@ -76,7 +75,7 @@ try {
     }
     else{
         const isMatch =await bcrypt.compare(password ,existingEmail.password);
-        if(isMatch)
+        if(!isMatch)
         {
             return res.json({
                 status:500,
